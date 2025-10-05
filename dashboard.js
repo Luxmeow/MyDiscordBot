@@ -50,5 +50,20 @@ app.get("/callback", async (req, res) => {
         grant_type: "authorization_code",
         code,
         redirect_uri: REDIRECT_URI,
-        scope: "identify email guilds conn
+        scope: "identify email guilds connections" // ✅ fixed, full string
+      }),
+    });
 
+    const tokenData = await tokenResponse.json();
+    if (tokenData.error) return res.send("❌ Token error: " + tokenData.error);
+
+    // Successful login
+    res.redirect("https://youtu.be/dQw4w9WgXcQ");
+  } catch (error) {
+    console.error(error);
+    res.send("❌ An error occurred while handling the callback.");
+  }
+});
+
+// Start server
+app.listen(PORT, () => console.log(`✅ Server running at http://localhost:${PORT}`));
