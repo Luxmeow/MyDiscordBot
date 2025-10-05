@@ -1,16 +1,14 @@
 import express from "express";
 import fetch from "node-fetch";
-import 'dotenv/config'; // ✅ add this line
+import 'dotenv/config'; // loads variables from .env automatically
 
 const app = express();
-const PORT = 1254;
+const PORT = process.env.PORT || 1254; // Render will assign a PORT automatically
 
-// ✅ replace hardcoded values with environment variables
+// Use environment variables for sensitive info
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI || "http://localhost:1254/callback";
-
-
+const REDIRECT_URI = process.env.REDIRECT_URI; // e.g., "https://mydiscordbot-k6hx.onrender.com/callback"
 
 // Home page
 app.get("/", (req, res) => {
@@ -52,26 +50,5 @@ app.get("/callback", async (req, res) => {
         grant_type: "authorization_code",
         code,
         redirect_uri: REDIRECT_URI,
-        scope: "identify email guilds connections",
-      }),
-    });
-
-    const tokenData = await tokenResponse.json();
-
-    if (tokenData.error) {
-      return res.send("❌ Token error: " + tokenData.error);
-    }
-
-    // ✅ Successful login, redirect to a page (e.g. YouTube, Discord, etc.)
-    res.redirect("https://youtu.be/dQw4w9WgXcQ");
-  } catch (error) {
-    console.error(error);
-    res.send("❌ An error occurred while handling the callback.");
-  }
-});
-
-// 🟢 Keeps the server running
-app.listen(PORT, () => {
-  console.log(`✅ Server is running at http://localhost:${PORT}`);
-});
+        scope: "identify email guilds conn
 
