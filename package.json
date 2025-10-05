@@ -1,6 +1,7 @@
 {
   "name": "mydiscordbot",
   "version": "1.0.0",
+  "description": "Discord OAuth Dashboard Bot",
   "main": "dashboard.js",
   "type": "module",
   "scripts": {
