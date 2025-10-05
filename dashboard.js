@@ -4,9 +4,11 @@ import fetch from "node-fetch";
 const app = express();
 const PORT = 1254;
 
-const CLIENT_ID = "994961161286066176";
-const CLIENT_SECRET = "l-4kT-o-GPDHQdr-FbT4SJ-hpO-6-R58";
-const REDIRECT_URI = "http://localhost:1254/callback";
+import 'dotenv/config';
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI || "http://localhost:1254/callback";
+
 
 // Home page
 app.get("/", (req, res) => {
@@ -70,3 +72,4 @@ app.get("/callback", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server is running at http://localhost:${PORT}`);
 });
+
