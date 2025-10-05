@@ -1,13 +1,15 @@
 import express from "express";
 import fetch from "node-fetch";
+import 'dotenv/config'; // ✅ add this line
 
 const app = express();
 const PORT = 1254;
 
-import 'dotenv/config';
+// ✅ replace hardcoded values with environment variables
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI || "http://localhost:1254/callback";
+
 
 
 // Home page
