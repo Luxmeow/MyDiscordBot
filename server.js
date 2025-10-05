@@ -1,17 +1,16 @@
 import express from "express";
 import fetch from "node-fetch";
-import bodyParser from "body-parser";
+import 'dotenv/config'; // load environment variables
 
 const app = express();
-const PORT = 1254;
+const PORT = process.env.PORT || 1254; // dynamic port for Render
 
-const CLIENT_ID = "994961161286066176";
-const CLIENT_SECRET = "l-4kT-o-GPDHQdr-FbT4SJ-hpO-6-R58";
-const REDIRECT_URI = "http://localhost:1254/callback";
+// Use environment variables for secrets
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI; // should match your Discord OAuth2 app
 
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// --- home page ---
+// --- Home page ---
 app.get("/", (req, res) => {
   const scopes = ["identify", "email", "guilds", "connections"];
   const authorizeURL =
@@ -22,7 +21,7 @@ app.get("/", (req, res) => {
   res.send(`<a href="${authorizeURL}">Login with Discord</a>`);
 });
 
-// --- callback from Discord ---
+// --- Callback from Discord ---
 app.get("/callback", async (req, res) => {
   const code = req.query.code;
   if (!code) return res.send("❌ No code returned from Discord");
@@ -54,7 +53,7 @@ app.get("/callback", async (req, res) => {
   });
   const userData = await userResponse.json();
 
-  // fetch user's guilds (servers)
+  // fetch user's guilds
   const guildResponse = await fetch("https://discord.com/api/users/@me/guilds", {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -81,4 +80,5 @@ app.get("/callback", async (req, res) => {
   console.log("👤 Logged in:", userData.username);
 });
 
-app.listen(PORT, () => console.log(`✅ Server running at http://localhost:${PORT}`));
+// Start server
+app.listen(PORT, () => console.log(`✅ Server running at ${REDIRECT_URI.replace("/callback","")}`));
